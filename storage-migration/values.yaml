@@ -1,0 +1,72 @@
+# Default values for storage-migration.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+image:
+  repository: 334301710522.dkr.ecr.eu-central-1.amazonaws.com/complex-migrations
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "SNAPSHOT-11"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits:
+    cpu: 100m
+    memory: 512Mi
+  requests:
+    cpu: 500m
+    memory: 1024Mi
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+storage:
+  ## Switching between MinIO and S3 storages
+  datastoreType: minio 
+  # datastoreType: s3
+  region: "eu-west-3"
+  secretName: ""
+  endpoint: http://<minio-release-name>-minio.default.svc.cluster.local:9000
+  accesskey: <minio-accesskey>
+  secretkey: <minio-secretkey>
+  accesskeyName: "access-key"
+  secretkeyName: "secret-key"
+  bucketPrefix: "prj-"
+  ## bucket name for storing Plugins
+  bucketForPlugins: "rp-bucket"
+  ## A new single bucket to which the data will be migrated
+  bucketSingleName: "rp-storage"
+  removeAgterMigration: true
+
+postgresql:
+  SecretName: ""
+  endpoint:
+    address: <postgresql-release-name>-postgresql.default.svc.cluster.local
+    port: 5432
+    user: rpuser
+    dbName: reportportal
+    password:
+    ## Number of database connections
+    connections: 

@@ -1,0 +1,96 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "storage-migration.fullname" . }}
+  labels:
+    {{- include "storage-migration.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: 1
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "storage-migration.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "storage-migration.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "storage-migration.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: RP_DB_HOST
+              value: "{{ .Values.postgresql.endpoint.address }}"
+            - name: RP_DB_USER
+              value: "{{ .Values.postgresql.endpoint.user }}"
+            - name: RP_DB_PASS
+              {{ if .Values.postgresql.SecretName }}
+                valueFrom:
+                  secretKeyRef:
+                    name: "{{ .Values.postgresql.SecretName }}"
+                    key: "postgresql-password"
+              {{ else }}
+                value: "{{ .Values.postgresql.endpoint.password }}"
+              {{ end }}
+            - name: RP_DB_NAME
+              value: "{{ .Values.postgresql.endpoint.dbName }}"
+            - name: DATASTORE_TYPE
+              value: "{{ .Values.storage.datastoreType }}"
+            {{- if .Values.storage.secretName }}
+            - name: DATASTORE_ACCESSKEY
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.storage.secretName }}"
+                  key: "{{ .Values.storage.accesskeyName }}"
+            - name: DATASTORE_SECRETKEY
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.storage.secretName }}"
+                  key: "{{ .Values.storage.secretkeyName }}"
+            {{- else }}
+            - name: DATASTORE_ACCESSKEY
+              value: "{{ .Values.storage.accesskey }}"
+            - name: DATASTORE_SECRETKEY
+              value: "{{ .Values.storage.secretkey }}"
+            {{- end }}
+            - name: DATASTORE_ENDPOINT
+              value: "{{ .Values.storage.endpoint }}"
+            - name: DATASTORE_BUCKETPREFIX
+              value: "{{ .Values.storage.bucketPrefix | default "prj-" }}"
+            - name: DATASTORE_DEFAULTBUCKETNAME # плагины, по умолчнаию rp-bucket
+              value: "{{ .Values.storage.bucketForPlugins }}" 
+            - name: DATASTORE_SINGLEBUCKETNAME
+              value: "{{ .Values.storage.bucketSingleName }}" # куда мигрирует
+            - name: DATASTORE_REGION
+              value: "{{ .Values.storage.region }}"
+            - name: DATASTORE_REMOVE_AFTER_MIGRATION
+              value: "{{ .Values.storage.removeAgterMigration }}"
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
