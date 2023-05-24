@@ -17,6 +17,7 @@ spec:
       labels:
         {{- include "storage-migration.selectorLabels" . | nindent 8 }}
     spec:
+      restartPolicy: Never
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
