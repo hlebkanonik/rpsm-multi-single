@@ -5,9 +5,9 @@ metadata:
   labels:
     {{- include "storage-migration.labels" . | nindent 4 }}
 spec:
-  selector:
-    matchLabels:
-      {{- include "storage-migration.selectorLabels" . | nindent 6 }}
+  # selector:
+  #   matchLabels:
+  #     {{- include "storage-migration.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
