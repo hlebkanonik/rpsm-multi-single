@@ -5,9 +5,6 @@ metadata:
   labels:
     {{- include "storage-migration.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: 1
-  {{- end }}
   selector:
     matchLabels:
       {{- include "storage-migration.selectorLabels" . | nindent 6 }}
@@ -24,7 +21,6 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "storage-migration.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -39,13 +35,13 @@ spec:
             - name: RP_DB_USER
               value: "{{ .Values.postgresql.endpoint.user }}"
             - name: RP_DB_PASS
-              {{ if .Values.postgresql.SecretName }}
-                valueFrom:
-                  secretKeyRef:
-                    name: "{{ .Values.postgresql.SecretName }}"
-                    key: "postgresql-password"
-              {{ else }}
-                value: "{{ .Values.postgresql.endpoint.password }}"
+            {{ if .Values.postgresql.SecretName }}
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.postgresql.SecretName }}"
+                  key: "postgresql-password"
+            {{ else }}
+              value: "{{ .Values.postgresql.endpoint.password }}"
               {{ end }}
             - name: RP_DB_NAME
               value: "{{ .Values.postgresql.endpoint.dbName }}"
