@@ -58,7 +58,7 @@ storage:
   bucketForPlugins: "rp-bucket"
   ## A new single bucket to which the data will be migrated
   bucketSingleName: "rp-storage"
-  removeAgterMigration: true
+  removeAfterMigration: true
 
 postgresql:
   SecretName: ""

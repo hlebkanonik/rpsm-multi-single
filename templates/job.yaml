@@ -74,7 +74,7 @@ spec:
             - name: DATASTORE_REGION
               value: "{{ .Values.storage.region }}"
             - name: DATASTORE_REMOVE_AFTER_MIGRATION
-              value: "{{ .Values.storage.removeAgterMigration }}"
+              value: "{{ .Values.storage.removeAfterMigration }}"
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
