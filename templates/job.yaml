@@ -91,35 +91,23 @@ spec:
                   name: "{{ .Values.storage.minio.secretName }}"
                   key: "{{ .Values.storage.minio.secretkeyName }}"
             {{- else }}
-            - name: MINIO_ACCESS_KEY
-              value: "{{ .Values.storage.minio.accesskey }}"
-            - name: MINIO_SECRET_KEY
-              value: "{{ .Values.storage.minio.secretkey }}"
-            {{- end}}
-            - name: S3_ENDPOINT
-              value: "{{ .Values.storage.s3.endpoint }}"
-            {{- if .Values.storage.s3.secretName }}
-            - name: S3_ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: "{{ .Values.storage.s3.secretName }}"
-                  key: "{{ .Values.storage.s3.accesskeyName }}"
-            - name: S3_SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: "{{ .Values.storage.s3.secretName }}"
-                  key: "{{ .Values.storage.s3.secretkeyName }}"
-            {{- else }}
-            - name: S3_ACCESS_KEY
-              value: "{{ .Values.storage.s3.accesskey }}"
-            - name: S3_SECRET_KEY
-              value: "{{ .Values.storage.s3.secretkey }}"
-            {{- end}}
-            - name: MINIO_SINGLE_BUCKET
-              value: "{{ .Values.storage.bucket.bucketMinioSingleName }}" 
-            - name: S3_SINGLE_BUCKET
-              value: "{{ .Values.storage.bucket.bucketS3SingleName }}"  
-          {{- end }}
+            - name: DATASTORE_ACCESSKEY
+              value: "{{ .Values.storage.accesskey }}"
+            - name: DATASTORE_SECRETKEY
+              value: "{{ .Values.storage.secretkey }}"
+            {{- end }}
+            - name: DATASTORE_ENDPOINT
+              value: "{{ .Values.storage.endpoint }}"
+            - name: DATASTORE_BUCKETPREFIX
+              value: "{{ .Values.storage.bucketPrefix | default "prj-" }}"
+            - name: DATASTORE_DEFAULTBUCKETNAME # плагины, по умолчнаию rp-bucket
+              value: "{{ .Values.storage.bucketForPlugins }}" 
+            - name: DATASTORE_SINGLEBUCKETNAME
+              value: "{{ .Values.storage.bucketSingleName }}" # куда мигрирует
+            - name: DATASTORE_REGION
+              value: "{{ .Values.storage.region }}"
+            - name: DATASTORE_REMOVE_AFTER_MIGRATION
+              value: "{{ .Values.storage.removeAgterMigration }}"
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
