@@ -1,2 +1,2 @@
-# Report Portal storage migraton
-Report Portal storage migraton from multiple buckets to single bucket for S3 and MinIO
+# Report Portal storage migration
+Report Portal storage migration from multiple buckets to single bucket for S3 and MinIO
