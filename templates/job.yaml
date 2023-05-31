@@ -79,16 +79,42 @@ spec:
           {{- else if eq .Values.migrationType "s3" }}
             - name: MINIO_ENDPOINT
               value: "{{ .Values.storage.minio.endpoint }}"
+            {{- if .Values.storage.minio.secretName }}
+            - name: MINIO_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.storage.minio.secretName }}"
+                  key: "{{ .Values.storage.minio.accesskeyName }}"
+            - name: MINIO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.storage.minio.secretName }}"
+                  key: "{{ .Values.storage.minio.secretkeyName }}"
+            {{- else }}
             - name: MINIO_ACCESS_KEY
               value: "{{ .Values.storage.minio.accesskey }}"
             - name: MINIO_SECRET_KEY
               value: "{{ .Values.storage.minio.secretkey }}"
+            {{- end}}
             - name: S3_ENDPOINT
               value: "{{ .Values.storage.s3.endpoint }}"
+            {{- if .Values.storage.s3.secretName }}
+            - name: S3_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.storage.s3.secretName }}"
+                  key: "{{ .Values.storage.s3.accesskeyName }}"
+            - name: S3_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Values.storage.s3.secretName }}"
+                  key: "{{ .Values.storage.s3.secretkeyName }}"
+            {{- else }}
             - name: S3_ACCESS_KEY
               value: "{{ .Values.storage.s3.accesskey }}"
             - name: S3_SECRET_KEY
               value: "{{ .Values.storage.s3.secretkey }}"
+            {{- end}}
             - name: MINIO_SINGLE_BUCKET
               value: "{{ .Values.storage.bucket.bucketMinioSingleName }}" 
             - name: S3_SINGLE_BUCKET

@@ -55,6 +55,8 @@ storage:
     endpoint: "http://s3.eu-central-1.amazonaws.com"
     accesskey: <s3-accesskey>
     secretkey: <s3-secretkey>
+    accesskeyName: "s3-access-key"
+    secretkeyName: "s3-secret-key"
   bucket:
     bucketPrefix: "prj-"
     ## bucket name for storing Plugins
