@@ -13,8 +13,10 @@ nameOverride: ""
 fullnameOverride: ""
 
 podAnnotations: {}
+
 podSecurityContext: {}
   # fsGroup: 2000
+
 securityContext: {}
   # capabilities:
   #   drop:
@@ -22,28 +24,23 @@ securityContext: {}
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
   # runAsUser: 1000
-nodeSelector: {}
-tolerations: []
-affinity: {}
 
 resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
   limits:
     cpu: 500m
     memory: 1024Mi
   requests:
     cpu: 100m
     memory: 512Mi
+nodeSelector: {}
 
-## Migrations types
-## 1. "single": from multi to single (supports s3 and minio)
-## 2. "s3": from single minio to single s3.
-migrationType: single
-# migrationType: s3
+tolerations: []
 
-## Storage Type for single bucket migration
-single:
-  type: minio
-  # type: s3
+affinity: {}
 
 storage:
   ## Switching between MinIO and S3 storages
@@ -61,7 +58,7 @@ storage:
   bucketForPlugins: "rp-bucket"
   ## A new single bucket to which the data will be migrated
   bucketSingleName: "rp-storage"
-  removeAgterMigration: true
+  removeAfterMigration: true
 
 postgresql:
   SecretName: ""
