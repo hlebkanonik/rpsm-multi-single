@@ -1,1 +1,1 @@
-# storage-migration
+# Migrating Report Portal storage from multiple buckets to one
