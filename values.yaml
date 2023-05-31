@@ -39,6 +39,12 @@ resources:
 ## 2. "s3": from single minio to single s3.
 migrationType: single
 # migrationType: s3
+
+## Storage Type for single bucket migration
+single:
+  type: minio
+  # type: s3
+
 storage:
   removeAfterMigration: true
   minio:

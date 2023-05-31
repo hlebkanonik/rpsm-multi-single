@@ -75,7 +75,7 @@ spec:
             - name: RP_DB_NAME
               value: "{{ .Values.postgresql.endpoint.dbName }}"
             - name: DATASTORE_TYPE
-              value: "minio"
+              value: "{{ .Values.single.type }}"
           {{- else if eq .Values.migrationType "s3" }}
             - name: MINIO_ENDPOINT
               value: "{{ .Values.storage.minio.endpoint }}"
