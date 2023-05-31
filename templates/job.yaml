@@ -45,7 +45,7 @@ spec:
             - name: RP_DB_NAME
               value: "{{ .Values.postgresql.endpoint.dbName }}"
             - name: DATASTORE_TYPE
-              value: "{{ .Values.storage.datastoreType }}"
+              value: "{{ .Values.storage.type }}"
             {{- if .Values.storage.secretName }}
             - name: DATASTORE_ACCESSKEY
               valueFrom:
@@ -64,15 +64,15 @@ spec:
               value: "{{ .Values.storage.secretkey }}"
             {{- end }}
             - name: DATASTORE_ENDPOINT
-              value: "{{ .Values.storage.endpoint }}"
+              value: "{{ .Values.storage.minio.endpoint }}"
             - name: DATASTORE_BUCKETPREFIX
-              value: "{{ .Values.storage.bucketPrefix | default "prj-" }}"
+              value: "{{ .Values.storage.bucket.bucketPrefix | default "prj-" }}"
             - name: DATASTORE_DEFAULTBUCKETNAME # плагины, по умолчнаию rp-bucket
-              value: "{{ .Values.storage.bucketForPlugins }}" 
+              value: "{{ .Values.storage.bucket.bucketForPlugins }}" 
             - name: DATASTORE_SINGLEBUCKETNAME
-              value: "{{ .Values.storage.bucketSingleName }}" # куда мигрирует
+              value: "{{ .Values.storage.bucket.bucketSingleName }}" # куда мигрирует
             - name: DATASTORE_REGION
-              value: "{{ .Values.storage.region }}"
+              value: "{{ .Values.storage.s3.region }}"
             - name: DATASTORE_REMOVE_AFTER_MIGRATION
               value: "{{ .Values.storage.removeAfterMigration }}"
           resources:

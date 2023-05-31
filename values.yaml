@@ -44,21 +44,24 @@ affinity: {}
 
 storage:
   ## Switching between MinIO and S3 storages
-  datastoreType: minio 
-  # datastoreType: s3
-  region: "eu-west-3"
+  type: minio
+  # type: s3
+  removeAfterMigration: true
   secretName: ""
-  endpoint: http://<minio-release-name>-minio.default.svc.cluster.local:9000
-  accesskey: <minio-accesskey>
-  secretkey: <minio-secretkey>
+  accesskey: <accesskey>
+  secretkey: <secretkey>
   accesskeyName: "access-key"
   secretkeyName: "secret-key"
-  bucketPrefix: "prj-"
-  ## bucket name for storing Plugins
-  bucketForPlugins: "rp-bucket"
-  ## A new single bucket to which the data will be migrated
-  bucketSingleName: "rp-storage"
-  removeAfterMigration: true
+  minio:
+    endpoint: http://<minio-release-name>-minio.default.svc.cluster.local:9000
+  s3:
+    region: "eu-west-3"
+  bucket:
+    bucketPrefix: "prj-"
+    ## bucket name for storing Plugins
+    bucketForPlugins: "rp-bucket"
+    ## A new single bucket to which the data will be migrated
+    bucketSingleName: "rp-storage"
 
 postgresql:
   SecretName: ""
