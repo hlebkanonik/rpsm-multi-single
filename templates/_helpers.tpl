@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "storage-migration.name" -}}
+{{- define "rpsm-multi-single.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "storage-migration.fullname" -}}
+{{- define "rpsm-multi-single.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "storage-migration.chart" -}}
+{{- define "rpsm-multi-single.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "storage-migration.labels" -}}
-helm.sh/chart: {{ include "storage-migration.chart" . }}
-{{ include "storage-migration.selectorLabels" . }}
+{{- define "rpsm-multi-single.labels" -}}
+helm.sh/chart: {{ include "rpsm-multi-single.chart" . }}
+{{ include "rpsm-multi-single.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,17 +45,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "storage-migration.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "storage-migration.name" . }}
+{{- define "rpsm-multi-single.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "rpsm-multi-single.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "storage-migration.serviceAccountName" -}}
+{{- define "rpsm-multi-single.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "storage-migration.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "rpsm-multi-single.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}

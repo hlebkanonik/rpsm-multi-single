@@ -1,9 +1,9 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "storage-migration.fullname" . }}
+  name: {{ include "rpsm-multi-single.fullname" . }}
   labels:
-    {{- include "storage-migration.labels" . | nindent 4 }}
+    {{- include "rpsm-multi-single.labels" . | nindent 4 }}
 spec:
   ttlSecondsAfterFinished: 86400
   template:
@@ -13,7 +13,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "storage-migration.selectorLabels" . | nindent 8 }}
+        {{- include "rpsm-multi-single.selectorLabels" . | nindent 8 }}
     spec:
       restartPolicy: Never
       {{- with .Values.imagePullSecrets }}

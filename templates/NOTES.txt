@@ -1,1 +1,1 @@
-Migration data from multiple buckets to single
+Report Portal storage migration from multiple buckets to single bucket for S3 and MinIO
